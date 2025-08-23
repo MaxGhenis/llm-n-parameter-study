@@ -7,10 +7,10 @@ name = "llm-n-parameter"
 version = "0.1.0"
 description = "Statistical analysis of the n parameter in LLM APIs"
 readme = "README.md"
-requires-python = ">=3.9"
-license = {text = "MIT"}
+requires-python = ">=3.13"
+license = {text = "Unlicense"}
 authors = [
-    {name = "Max Ghenis", email = "max@example.com"}
+    {name = "Max Ghenis", email = "max@policyengine.org"}
 ]
 keywords = ["llm", "statistics", "api", "research", "reproducibility"]
 classifiers = [

@@ -44,12 +44,12 @@ jobs:
     - name: Type check with mypy
       run: |
         pip install mypy
-        mypy src --ignore-missing-imports || true
+        mypy src --ignore-missing-imports
     
     - name: Test with pytest
       run: |
         pip install pytest pytest-cov
-        pytest tests -v || true
+        pytest tests -v
 
   build-book:
     runs-on: ubuntu-latest

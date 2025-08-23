@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "model": "gpt-4o-mini",
+    "temperature": 1.0,
+    "method": "n_parameter",
+    "n_value": 5,
+    "num_batches": 20,
+    "timestamp": "2024-08-23T12:00:00Z",
+    "seed": 42,
+    "api_version": "2024-02-01"
+  },
+  "prompt": "Pick a random number between 1 and 100.",
+  "batches": [
+    {
+      "batch_id": 0,
+      "responses": [47, 23, 89, 47, 61],
+      "latency_ms": 1234
+    },
+    {
+      "batch_id": 1,
+      "responses": [47, 78, 34, 92, 15],
+      "latency_ms": 1189
+    },
+    {
+      "batch_id": 2,
+      "responses": [52, 47, 88, 29, 73],
+      "latency_ms": 1301
+    },
+    {
+      "batch_id": 3,
+      "responses": [47, 67, 41, 83, 26],
+      "latency_ms": 1156
+    },
+    {
+      "batch_id": 4,
+      "responses": [38, 91, 47, 55, 72],
+      "latency_ms": 1205
+    },
+    {
+      "batch_id": 5,
+      "responses": [63, 47, 19, 84, 36],
+      "latency_ms": 1278
+    },
+    {
+      "batch_id": 6,
+      "responses": [47, 28, 75, 42, 69],
+      "latency_ms": 1198
+    },
+    {
+      "batch_id": 7,
+      "responses": [81, 47, 56, 33, 94],
+      "latency_ms": 1245
+    },
+    {
+      "batch_id": 8,
+      "responses": [47, 45, 68, 87, 22],
+      "latency_ms": 1167
+    },
+    {
+      "batch_id": 9,
+      "responses": [59, 76, 47, 31, 65],
+      "latency_ms": 1289
+    },
+    {
+      "batch_id": 10,
+      "responses": [47, 82, 14, 70, 48],
+      "latency_ms": 1223
+    },
+    {
+      "batch_id": 11,
+      "responses": [35, 47, 93, 58, 24],
+      "latency_ms": 1195
+    },
+    {
+      "batch_id": 12,
+      "responses": [77, 21, 47, 66, 85],
+      "latency_ms": 1312
+    },
+    {
+      "batch_id": 13,
+      "responses": [47, 54, 39, 71, 96],
+      "latency_ms": 1178
+    },
+    {
+      "batch_id": 14,
+      "responses": [62, 47, 80, 27, 43],
+      "latency_ms": 1256
+    },
+    {
+      "batch_id": 15,
+      "responses": [47, 37, 64, 90, 18],
+      "latency_ms": 1201
+    },
+    {
+      "batch_id": 16,
+      "responses": [46, 74, 47, 51, 79],
+      "latency_ms": 1234
+    },
+    {
+      "batch_id": 17,
+      "responses": [47, 60, 25, 86, 40],
+      "latency_ms": 1189
+    },
+    {
+      "batch_id": 18,
+      "responses": [53, 47, 69, 32, 95],
+      "latency_ms": 1267
+    },
+    {
+      "batch_id": 19,
+      "responses": [47, 44, 57, 73, 20],
+      "latency_ms": 1145
+    }
+  ],
+  "statistics": {
+    "total_responses": 100,
+    "mean": 52.8,
+    "std": 23.4,
+    "position_0_bias": 0.35,
+    "value_47_frequency": 0.24,
+    "icc": 0.69
+  }
+}
