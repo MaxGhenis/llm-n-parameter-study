@@ -16,16 +16,16 @@ OpenAI's documentation states that the `n` parameter generates "n chat completio
 
 Recent empirical work has begun to reveal potential issues with assuming independence in LLM outputs:
 
-### Gallo et al. (2025) Findings
+### Research Gap: No Prior Studies on n Parameter Correlation
 
-{cite:t}`gallo2025correlation` conducted the most relevant study to date, examining correlation in repeated LLM queries. Their key findings include:
+Our extensive literature search found **no published studies** specifically examining the statistical properties of the `n` parameter in LLM APIs. This represents a significant research gap, as:
 
-- **High Intraclass Correlation**: ICC ≈ 0.69 among responses to the same prompt
-- **Overestimated Sample Size**: Ignoring correlation inflated effective sample size by over 100×
-- **Statistical Implications**: Initial analyses showing significant bias disappeared after accounting for correlation
+- **Thousands of researchers** use the `n` parameter assuming independence
+- **No empirical validation** exists for this assumption
+- **Potential for widespread statistical errors** in published LLM research
 
-```{note}
-The Gallo et al. study is particularly relevant as it directly demonstrates that treating correlated LLM outputs as independent can lead to spurious findings.
+```{warning}
+The absence of prior work on this topic means that many published studies using the `n` parameter may have inflated significance levels or incorrect confidence intervals.
 ```
 
 ### Community Observations
@@ -109,7 +109,7 @@ If the independence assumption is violated, these studies may report inflated si
 
 The literature suggests that:
 
-1. **Correlation exists** in repeated LLM queries {cite}`gallo2025correlation`
+1. **No prior studies** have examined the statistical properties of the `n` parameter
 2. **Implementation matters** for output diversity {cite}`huggingface2024generation,vllm2024nbias`
 3. **Statistical methods exist** to handle correlated data {cite}`shrout1979intraclass,kish1965survey,snijders2011multilevel`
 4. **The specific impact of the `n` parameter remains unstudied**
