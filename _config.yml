@@ -17,7 +17,11 @@ html:
   use_issues_button: true
   use_edit_page_button: true
   favicon: favicon.ico
-  home_page_in_navbar: true
+  home_page_in_navbar: false
+  navbar_number_sections: false
+  navbar_footer_text: ""
+  extra_navbar: ""
+  baseurl: "https://maxghenis.github.io/llm-n-parameter-study/"
   
 # GitHub repository settings
 repository:
@@ -42,15 +46,6 @@ latex:
 # Sphinx configuration
 sphinx:
   config:
-    html_theme: pydata_sphinx_theme
-    html_theme_options:
-      search_bar_text: "Search this book..."
-      use_sidenotes: true
-      show_toc_level: 2
-      navigation_with_keys: true
-      show_nav_level: 2
-      collapse_navigation: false
-      navigation_depth: 3
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
     myst_enable_extensions:
       - amsmath
