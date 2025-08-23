@@ -1,7 +1,7 @@
 # Statistical Equivalence of the n Parameter in LLM APIs: An Empirical Study
 
-[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://yourusername.github.io/llm-n-parameter-study)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://maxghenis.github.io/llm-n-parameter-study)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 ## Abstract
 
@@ -18,35 +18,55 @@ This research investigates whether using the `n` parameter in Large Language Mod
 
 ```
 llm-n-parameter-study/
+├── uv.lock                  # Locked dependencies for reproducibility
+├── pyproject.toml           # Project metadata and dependencies
 ├── _config.yml              # Jupyter Book configuration
 ├── _toc.yml                 # Table of contents
 ├── intro.md                 # Introduction
 ├── chapters/
 │   ├── 01_methodology.ipynb
-│   ├── 02_openai_experiments.ipynb
-│   ├── 03_gemini_experiments.ipynb
-│   ├── 04_statistical_analysis.ipynb
-│   ├── 05_cost_analysis.ipynb
-│   └── 06_conclusions.md
-├── data/                    # Experimental data
-├── src/                     # Source code for experiments
-└── requirements.txt         # Python dependencies
+│   └── 02_literature_review.md
+├── data/                    # Sample data and results
+│   ├── sample_experiments/  # Pre-collected API results
+│   └── synthetic/           # Generated test data
+├── src/llm_n_parameter/     # Python package
+│   ├── experiments.py       # Experiment runner
+│   ├── analysis.py         # Statistical analyzers
+│   └── visualization.py    # Plotting utilities
+├── tests/                   # Comprehensive test suite
+├── scripts/                 # Data generation scripts
+└── .env.example            # API key template
 ```
 
 ## Quick Start
+
+### Prerequisites
+
+This project uses [`uv`](https://github.com/astral-sh/uv) for fast, reliable Python package management.
+
+```bash
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
 ### Local Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/llm-n-parameter-study.git
+git clone https://github.com/maxghenis/llm-n-parameter-study.git
 cd llm-n-parameter-study
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies with uv (automatically uses Python 3.13)
+uv sync
 
-# Build the book
-jupyter-book build .
+# Run tests
+uv run pytest
+
+# Generate synthetic data (no API keys needed)
+uv run python scripts/generate_synthetic_data.py
+
+# Build the Jupyter Book
+uv run jupyter-book build .
 
 # View locally
 open _build/html/index.html

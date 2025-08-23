@@ -21,35 +21,31 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
-    - name: Cache pip packages
-      uses: actions/cache@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
       with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+        enable-cache: true
+        cache-dependency-glob: "uv.lock"
     
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -e .
+        uv sync --frozen
     
     - name: Lint with flake8
       run: |
-        pip install flake8
-        flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        uv pip install flake8
+        uv run flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        uv run flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Type check with mypy
       run: |
-        pip install mypy
-        mypy src --ignore-missing-imports
+        uv pip install mypy
+        uv run mypy src --ignore-missing-imports
     
     - name: Test with pytest
       run: |
-        pip install pytest pytest-cov
-        pytest tests -v
+        uv sync --frozen --extra dev
+        uv run pytest tests -v
 
   build-book:
     runs-on: ubuntu-latest
@@ -62,17 +58,21 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.13'
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+        cache-dependency-glob: "uv.lock"
     
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install jupyter-book
-        pip install -r requirements.txt
+        uv sync --frozen --extra docs
     
     - name: Build Jupyter Book
       run: |
-        jupyter-book build .
+        uv run jupyter-book build .
     
     - name: Upload book artifact
       uses: actions/upload-artifact@v4
