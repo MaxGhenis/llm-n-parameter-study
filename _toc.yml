@@ -1,0 +1,51 @@
+# Table of contents
+format: jb-book
+root: intro
+parts:
+  - caption: Background
+    chapters:
+    - file: chapters/01_methodology
+      title: Methodology
+    - file: chapters/02_literature_review
+      title: Literature Review
+      
+  - caption: Experiments
+    chapters:
+    - file: chapters/03_openai_experiments
+      title: OpenAI GPT Models
+    - file: chapters/04_gemini_experiments
+      title: Google Gemini Models
+    - file: chapters/05_cross_model_comparison
+      title: Cross-Model Analysis
+      
+  - caption: Analysis
+    chapters:
+    - file: chapters/06_statistical_analysis
+      title: Statistical Analysis
+    - file: chapters/07_performance_analysis
+      title: Performance & Cost Analysis
+    - file: chapters/08_independence_testing
+      title: Independence Testing
+      
+  - caption: Applications
+    chapters:
+    - file: chapters/09_practical_implications
+      title: Practical Implications
+    - file: chapters/10_implementation_guide
+      title: Implementation Guide
+      
+  - caption: Conclusions
+    chapters:
+    - file: chapters/11_conclusions
+      title: Conclusions
+    - file: chapters/12_future_work
+      title: Future Work
+      
+  - caption: Appendix
+    chapters:
+    - file: appendix/api_documentation
+      title: API Documentation
+    - file: appendix/reproducibility
+      title: Reproducibility Guide
+    - file: appendix/raw_data
+      title: Raw Data

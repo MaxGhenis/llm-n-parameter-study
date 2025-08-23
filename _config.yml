@@ -1,0 +1,64 @@
+# Book settings
+title: "Statistical Equivalence of the n Parameter in LLM APIs"
+author: Max Ghenis
+copyright: "2024"
+logo: logo.png
+only_build_toc_files: true
+
+# Force re-execution of notebooks on each build (set to 'cache' for faster builds)
+execute:
+  execute_notebooks: auto
+  timeout: 600
+  allow_errors: false
+
+# Add GitHub buttons
+html:
+  use_repository_button: true
+  use_issues_button: true
+  use_edit_page_button: true
+  favicon: favicon.ico
+  home_page_in_navbar: true
+  
+# GitHub repository settings
+repository:
+  url: https://github.com/maxghenis/llm-n-parameter-study
+  branch: main
+  path_to_book: .
+
+# Launch buttons for interactive content
+launch_buttons:
+  notebook_interface: "jupyterlab"
+  binderhub_url: ""
+  colab_url: "https://colab.research.google.com"
+
+# Bibliography settings
+bibtex_bibfiles:
+  - references.bib
+
+# LaTeX settings for better math rendering
+latex:
+  latex_engine: pdflatex
+
+# Sphinx configuration
+sphinx:
+  config:
+    html_theme: pydata_sphinx_theme
+    html_theme_options:
+      search_bar_text: "Search this book..."
+      use_sidenotes: true
+      show_toc_level: 2
+      navigation_with_keys: true
+      show_nav_level: 2
+      collapse_navigation: false
+      navigation_depth: 3
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    myst_enable_extensions:
+      - amsmath
+      - colon_fence
+      - deflist
+      - dollarmath
+      - html_image
+      - linkify
+      - replacements
+      - smartquotes
+      - substitution
