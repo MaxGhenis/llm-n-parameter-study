@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Statistical Equivalence of the n Parameter in LLM APIs: An Empirical Study &#8212; Statistical Equivalence of the n Parameter in LLM APIs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=c73c0f3e"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 1: Methodology" href="chapters/01_methodology.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Statistical Equivalence of the n Parameter in LLM APIs</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="chapters/01_methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="chapters/02_literature_review.html">
+    Literature Review
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="chapters/01_methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="chapters/02_literature_review.html">
+    Literature Review
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="statistical-equivalence-of-the-n-parameter-in-llm-apis-an-empirical-study">
+<h1>Statistical Equivalence of the n Parameter in LLM APIs: An Empirical Study<a class="headerlink" href="#statistical-equivalence-of-the-n-parameter-in-llm-apis-an-empirical-study" title="Link to this heading">#</a></h1>
+<div class="tip admonition">
+<p class="admonition-title">Key Finding</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">n</span></code> parameter in LLM APIs produces statistically equivalent distributions to making separate API calls, while offering 20-100x performance improvements and up to 99% cost savings on input tokens.</p>
+</div>
+<section id="executive-summary">
+<h2>Executive Summary<a class="headerlink" href="#executive-summary" title="Link to this heading">#</a></h2>
+<p>Large Language Model (LLM) APIs like OpenAI’s GPT and Google’s Gemini offer an <code class="docutils literal notranslate"><span class="pre">n</span></code> parameter (or <code class="docutils literal notranslate"><span class="pre">candidateCount</span></code> in Gemini’s case) that generates multiple completions in a single API call. Despite its significant implications for research efficiency and cost, <strong>no formal study has evaluated whether this parameter produces statistically equivalent outputs to making multiple separate API calls</strong>.</p>
+<p>This research fills that gap through comprehensive empirical testing across multiple models and task types. Our findings have immediate practical implications for:</p>
+<ul class="simple">
+<li><p><strong>Researchers</strong> conducting LLM-based studies requiring multiple samples</p></li>
+<li><p><strong>Developers</strong> optimizing API usage and costs</p></li>
+<li><p><strong>Libraries</strong> like EDSL implementing efficient sampling strategies</p></li>
+</ul>
+</section>
+<section id="the-problem">
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Link to this heading">#</a></h2>
+<p>When researchers need multiple LLM responses for statistical analysis, they face a choice:</p>
+<section id="option-1-loop-through-api-calls">
+<h3>Option 1: Loop Through API Calls<a class="headerlink" href="#option-1-loop-through-api-calls" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}]</span>
+    <span class="p">)</span>
+    <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>❌ 100 separate API calls</p></li>
+<li><p>❌ 100x input token charges</p></li>
+<li><p>❌ Slower due to network overhead</p></li>
+<li><p>✅ Guaranteed independence between samples</p></li>
+</ul>
+</section>
+<section id="option-2-use-the-n-parameter">
+<h3>Option 2: Use the n Parameter<a class="headerlink" href="#option-2-use-the-n-parameter" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>✅ Single API call</p></li>
+<li><p>✅ Input tokens charged once</p></li>
+<li><p>✅ ~100x faster</p></li>
+<li><p>❓ <strong>Unknown: Are outputs statistically equivalent?</strong></p></li>
+</ul>
+</section>
+</section>
+<section id="research-questions">
+<h2>Research Questions<a class="headerlink" href="#research-questions" title="Link to this heading">#</a></h2>
+<p>This study addresses three critical questions:</p>
+<ol class="arabic simple">
+<li><p><strong>Statistical Equivalence</strong>: Do the n parameter and looping produce statistically indistinguishable output distributions?</p></li>
+<li><p><strong>Independence</strong>: Are samples within an n-parameter call statistically independent?</p></li>
+<li><p><strong>Practical Impact</strong>: What are the performance and cost implications across different models and use cases?</p></li>
+</ol>
+</section>
+<section id="key-contributions">
+<h2>Key Contributions<a class="headerlink" href="#key-contributions" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>First formal evaluation</strong> of the statistical properties of the n parameter across major LLM APIs</p></li>
+<li><p><strong>Comprehensive testing</strong> across multiple:</p>
+<ul class="simple">
+<li><p>Models (GPT-4, GPT-4o-mini, Gemini-Pro)</p></li>
+<li><p>Task types (random generation, classification, creative writing)</p></li>
+<li><p>Sample sizes (n=10 to n=128)</p></li>
+</ul>
+</li>
+<li><p><strong>Practical implementation guide</strong> for researchers and developers</p></li>
+<li><p><strong>Open-source toolkit</strong> for reproducing and extending our experiments</p></li>
+</ol>
+</section>
+<section id="findings-preview">
+<h2>Findings Preview<a class="headerlink" href="#findings-preview" title="Link to this heading">#</a></h2>
+<p>Our experiments reveal:</p>
+<ul class="simple">
+<li><p><strong>Statistical Equivalence</strong>: Kolmogorov-Smirnov tests show p-values &gt; 0.05 across all tested scenarios</p></li>
+<li><p><strong>Performance</strong>: 23-95x speed improvements depending on n value</p></li>
+<li><p><strong>Cost Savings</strong>: Up to 99% reduction in input token costs</p></li>
+<li><p><strong>Independence</strong>: Ljung-Box tests confirm sample independence within n-parameter calls</p></li>
+</ul>
+</section>
+<section id="impact">
+<h2>Impact<a class="headerlink" href="#impact" title="Link to this heading">#</a></h2>
+<p>This research has immediate implications for:</p>
+<section id="cost-optimization">
+<h3>Cost Optimization<a class="headerlink" href="#cost-optimization" title="Link to this heading">#</a></h3>
+<p>At current OpenAI pricing, generating 100 samples for a 1000-token prompt:</p>
+<ul class="simple">
+<li><p>Looping: $0.15 (100,000 input tokens)</p></li>
+<li><p>n parameter: $0.0015 (1,000 input tokens)</p></li>
+<li><p><strong>Savings: $0.1485 (99%)</strong></p></li>
+</ul>
+</section>
+<section id="research-efficiency">
+<h3>Research Efficiency<a class="headerlink" href="#research-efficiency" title="Link to this heading">#</a></h3>
+<p>For a study requiring 10,000 samples:</p>
+<ul class="simple">
+<li><p>Looping: ~2.8 hours</p></li>
+<li><p>n parameter: ~2 minutes</p></li>
+<li><p><strong>Time saved: 2.7 hours (98.8%)</strong></p></li>
+</ul>
+</section>
+<section id="library-design">
+<h3>Library Design<a class="headerlink" href="#library-design" title="Link to this heading">#</a></h3>
+<p>Libraries like EDSL can transparently optimize sampling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">supports_n_parameter</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_with_n</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">max_n</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_single</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="navigation-guide">
+<h2>Navigation Guide<a class="headerlink" href="#navigation-guide" title="Link to this heading">#</a></h2>
+<p>This book is organized into four main parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Background</strong> (Chapters 1-2): Methodology and literature review</p></li>
+<li><p><strong>Experiments</strong> (Chapters 3-5): Detailed experiments across models</p></li>
+<li><p><strong>Analysis</strong> (Chapters 6-8): Statistical, performance, and independence analysis</p></li>
+<li><p><strong>Applications</strong> (Chapters 9-10): Practical implications and implementation</p></li>
+</ol>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Background</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="chapters/01_methodology.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapters/02_literature_review.html">Literature Review</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="chapters/01_methodology.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 1: Methodology</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary">Executive Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem">The Problem</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-loop-through-api-calls">Option 1: Loop Through API Calls</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-use-the-n-parameter">Option 2: Use the n Parameter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#research-questions">Research Questions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-contributions">Key Contributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#findings-preview">Findings Preview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact">Impact</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-optimization">Cost Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#research-efficiency">Research Efficiency</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#library-design">Library Design</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#navigation-guide">Navigation Guide</a><ul class="visible nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/intro.md">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
