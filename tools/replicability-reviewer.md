@@ -3,6 +3,36 @@
 ## Purpose
 The replicability-reviewer agent evaluates projects for reproducibility, ensuring that other researchers or developers can successfully replicate results, builds, and analyses.
 
+## CRITICAL: Data Authenticity Verification
+
+### 0. DATA FABRICATION DETECTION (HIGHEST PRIORITY)
+**THIS MUST BE CHECKED FIRST - FABRICATED DATA = INSTANT FAILURE**
+
+- **Claims vs Implementation**: Do all claimed experiments have corresponding code?
+- **Claims vs Data**: Does real data exist for every claimed finding?
+- **Data Authenticity Markers**:
+  - API response headers/metadata present?
+  - Realistic latency variations?
+  - Error rates and retries visible?
+  - Timestamps consistent with actual collection?
+- **Statistical Realism**:
+  - Too-perfect patterns? (red flag)
+  - Convenient round numbers? (red flag)
+  - Every batch having same pattern? (red flag)
+- **File Naming**: 
+  - Files named "sample_" or "example_" claiming to be real data? (CRITICAL)
+  - Missing "synthetic_" prefix for test data? (CRITICAL)
+- **Documentation Claims**:
+  - "We found..." without corresponding data files? (FRAUD)
+  - "Results show..." without implementation? (FRAUD)
+  - Specific statistics without source data? (FRAUD)
+
+**Automatic Failure Conditions**:
+- Claims about findings without corresponding real data
+- "Sample" data presented as experimental results
+- Missing implementation for claimed experiments
+- Statistics that can't be traced to source data
+
 ## Core Capabilities
 
 ### 1. Dependency Analysis
@@ -59,6 +89,18 @@ Please run a replicability review on this project
 ```
 
 ## Checklist Template
+
+### 🚨 DATA AUTHENTICITY (MUST PASS FIRST)
+- [ ] Every claimed experiment has implementing code
+- [ ] Every statistical claim has source data
+- [ ] Data files contain API metadata/headers
+- [ ] No "sample" data presented as real results
+- [ ] Documentation claims match available data
+- [ ] File names accurately reflect content (synthetic/real)
+- [ ] Statistics can be recomputed from provided data
+- [ ] No suspiciously perfect patterns in "real" data
+- [ ] Timestamps and latencies look realistic
+- [ ] Error handling and edge cases visible in data
 
 ### ✅ Dependencies
 - [ ] Package manager file exists (requirements.txt, package.json, etc.)

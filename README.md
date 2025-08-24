@@ -1,18 +1,30 @@
-# Statistical Equivalence of the n Parameter in LLM APIs: An Empirical Study
+# Statistical Equivalence of the n Parameter in LLM APIs: A Research Framework
 
 [![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://maxghenis.github.io/llm-n-parameter-study)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-## Abstract
+## ⚠️ PROJECT STATUS: FRAMEWORK ONLY - NO REAL DATA YET
 
-This research investigates whether using the `n` parameter in Large Language Model (LLM) APIs produces statistically equivalent output distributions compared to making multiple separate API calls. We conduct comprehensive empirical tests across multiple models (OpenAI GPT-4, GPT-4o-mini, Google Gemini) and task types, analyzing both statistical properties and computational efficiency. Our findings demonstrate that the `n` parameter produces statistically indistinguishable distributions while offering substantial performance improvements (up to 100x faster) and cost savings (up to 99% reduction in input token charges).
+**This repository contains a research framework and methodology for testing the n parameter hypothesis. No actual experiments have been conducted yet. All data in `data/sample_experiments/` is SYNTHETIC and for demonstration purposes only.**
 
-## Key Findings
+## Proposed Research Question
 
-- ✅ **Statistical Equivalence**: Kolmogorov-Smirnov and Mann-Whitney U tests confirm distribution equivalence
-- ⚡ **Performance**: 20-100x speed improvement depending on n value
-- 💰 **Cost Efficiency**: 99% reduction in input token costs at n=100
-- 🔬 **Independence**: Samples within n-parameter calls maintain statistical independence
+This framework will investigate whether using the `n` parameter in Large Language Model (LLM) APIs produces statistically equivalent output distributions compared to making multiple separate API calls. 
+
+## Planned Experiments
+
+Once API keys are configured and experiments are run, we will test:
+- OpenAI's `n` parameter (GPT-4o-mini, GPT-4)
+- Google's `candidateCount` parameter (Gemini 1.5)
+- Statistical independence within batches
+- Performance and cost implications
+
+## Current Status
+
+- ✅ **Framework**: Complete statistical analysis pipeline
+- ✅ **Verification System**: Cryptographic proof of real API calls
+- ❌ **Real Data**: Not collected yet
+- ❌ **Findings**: No empirical results to report
 
 ## Repository Structure
 
@@ -38,7 +50,41 @@ llm-n-parameter-study/
 └── .env.example            # API key template
 ```
 
-## Quick Start
+## Running Real Experiments
+
+### ⚠️ WARNING: Real API Calls Cost Money!
+
+To run actual experiments with real data:
+
+```bash
+# Set up API keys
+export OPENAI_API_KEY="your-key-here"
+export GOOGLE_API_KEY="your-key-here"
+
+# Run small test (costs ~$0.05)
+uv run python scripts/run_real_experiments.py \
+  --provider openai \
+  --n 5 \
+  --batches 10 \
+  --separate-calls 50
+
+# Run full experiment (costs ~$1-2)
+uv run python scripts/run_real_experiments.py \
+  --provider both \
+  --n 5 \
+  --batches 100 \
+  --separate-calls 500
+```
+
+### Verification System
+
+All real API calls are cryptographically verified:
+- Request hashes prove when calls were made
+- Response metadata confirms authenticity
+- Latency measurements detect fake data
+- API headers validate genuine responses
+
+## Quick Start (Framework Testing Only)
 
 ### Prerequisites
 
