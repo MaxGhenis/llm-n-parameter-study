@@ -93,8 +93,14 @@ class VerifiedOpenAIExperiment:
                 "model": model,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": temperature,
-                "max_tokens": 50
             }
+            
+            # GPT-5 uses max_completion_tokens, older models use max_tokens
+            if "gpt-5" in model:
+                kwargs["max_completion_tokens"] = 50
+            else:
+                kwargs["max_tokens"] = 50
+                
             if n is not None:
                 kwargs["n"] = n
             
@@ -164,10 +170,10 @@ class VerifiedOpenAIExperiment:
     
     def run_n_parameter_experiment(
         self,
-        prompt: str = "Pick a random number between 1 and 100.",
+        prompt: str = "Generate a random integer between 1 and 100 inclusive. Respond with only the number, no other text.",
         n: int = 5,
         num_batches: int = 10,
-        model: str = "gpt-4o-mini",
+        model: str = "gpt-5-mini",
         temperature: float = 1.0
     ) -> Dict[str, Any]:
         """Run verified n-parameter experiment."""
@@ -245,9 +251,9 @@ class VerifiedOpenAIExperiment:
     
     def run_separate_calls_experiment(
         self,
-        prompt: str = "Pick a random number between 1 and 100.",
+        prompt: str = "Generate a random integer between 1 and 100 inclusive. Respond with only the number, no other text.",
         num_calls: int = 50,
-        model: str = "gpt-4o-mini",
+        model: str = "gpt-5-mini",
         temperature: float = 1.0
     ) -> Dict[str, Any]:
         """Run verified separate calls experiment."""
@@ -325,14 +331,16 @@ class VerifiedOpenAIExperiment:
 class VerifiedGeminiExperiment:
     """Gemini experiments with verification of real API calls."""
     
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, model_name: str = 'gemini-2.5-flash-lite'):
         """Initialize with API key."""
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("Google API key required. Set GOOGLE_API_KEY environment variable.")
         
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # Use the exact model name provided - NO SUBSTITUTION
+        self.model = genai.GenerativeModel(model_name)
+        self.model_name = model_name
         self.proofs: List[APICallProof] = []
     
     def _make_verified_call(
@@ -351,71 +359,89 @@ class VerifiedGeminiExperiment:
         request_data = f"{prompt}|gemini|{temperature}|{candidate_count}|{timestamp}"
         request_hash = hashlib.sha256(request_data.encode()).hexdigest()
         
-        try:
-            # Configure generation
-            generation_config = genai.GenerationConfig(
-                temperature=temperature,
-                max_output_tokens=50
-            )
-            if candidate_count is not None:
-                generation_config.candidate_count = candidate_count
-            
-            # Make real API call
-            response = self.model.generate_content(
-                prompt,
-                generation_config=generation_config
-            )
-            
-            # Calculate actual latency
-            latency_ms = (time.perf_counter() - start_time) * 1000
-            
-            # Extract responses
-            if candidate_count is not None and candidate_count > 1:
-                responses = [candidate.content.parts[0].text 
-                           for candidate in response.candidates]
+        # Add retry logic for 500 errors
+        max_retries = 3
+        retry_delay = 1.0
+        last_error = None
+        
+        for attempt in range(max_retries):
+            try:
+                # Configure generation
+                generation_config = genai.GenerationConfig(
+                    temperature=temperature,
+                    max_output_tokens=50
+                )
+                if candidate_count is not None:
+                    generation_config.candidate_count = candidate_count
+                
+                # Make real API call
+                response = self.model.generate_content(
+                    prompt,
+                    generation_config=generation_config
+                )
+                break  # Success, exit retry loop
+            except Exception as e:
+                last_error = e
+                if "500" in str(e) and attempt < max_retries - 1:
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                    continue
+                else:
+                    # Final attempt failed or non-retryable error
+                    latency_ms = (time.perf_counter() - start_time) * 1000
+                    proof = APICallProof(
+                        timestamp_utc=timestamp,
+                        request_hash=request_hash,
+                        response_headers={},
+                        latency_ms=latency_ms,
+                        model=self.model_name,
+                        provider="google",
+                        raw_response={},
+                        error=str(e)
+                    )
+                    self.proofs.append(proof)
+                    raise
+        else:
+            # All retries failed
+            if last_error:
+                raise last_error
+        
+        # Calculate actual latency
+        latency_ms = (time.perf_counter() - start_time) * 1000
+        
+        # Extract responses - always use candidates list for consistency
+        responses = []
+        for candidate in response.candidates:
+            if hasattr(candidate.content, 'parts') and len(candidate.content.parts) > 0:
+                responses.append(candidate.content.parts[0].text)
             else:
-                responses = [response.text]
-            
-            # Create proof of real API call
-            proof = APICallProof(
-                timestamp_utc=timestamp,
-                request_hash=request_hash,
-                response_headers={
-                    "model": "gemini-1.5-flash",
-                    "candidate_count": str(candidate_count or 1),
-                    "prompt_feedback": str(response.prompt_feedback) if hasattr(response, 'prompt_feedback') else ""
-                },
-                latency_ms=latency_ms,
-                model="gemini-1.5-flash",
-                provider="google",
-                raw_response={
-                    "text": responses,
-                    "candidates_count": len(response.candidates) if hasattr(response, 'candidates') else 1
-                }
-            )
-            
-            self.proofs.append(proof)
-            return responses, proof
-            
-        except Exception as e:
-            # Even errors are recorded as proof of real attempt
-            latency_ms = (time.perf_counter() - start_time) * 1000
-            proof = APICallProof(
-                timestamp_utc=timestamp,
-                request_hash=request_hash,
-                response_headers={},
-                latency_ms=latency_ms,
-                model="gemini-1.5-flash",
-                provider="google",
-                raw_response={},
-                error=str(e)
-            )
-            self.proofs.append(proof)
-            raise
+                # Fallback for empty responses
+                responses.append("")
+        
+        # Create proof of real API call
+        proof = APICallProof(
+            timestamp_utc=timestamp,
+            request_hash=request_hash,
+            response_headers={
+                "model": self.model_name,
+                "candidate_count": str(candidate_count or 1),
+                "prompt_feedback": str(response.prompt_feedback) if hasattr(response, 'prompt_feedback') else ""
+            },
+            latency_ms=latency_ms,
+            model=self.model_name,
+            provider="google",
+            raw_response={
+                "text": responses,
+                "candidates_count": len(response.candidates) if hasattr(response, 'candidates') else 1
+            }
+        )
+        
+        self.proofs.append(proof)
+        return responses, proof
     
     def run_candidate_count_experiment(
         self,
-        prompt: str = "Pick a random number between 1 and 100.",
+        prompt: str = "Generate a random integer between 1 and 100 inclusive. Respond with only the number, no other text.",
         candidate_count: int = 4,  # Gemini max is usually 4
         num_batches: int = 10,
         temperature: float = 1.0

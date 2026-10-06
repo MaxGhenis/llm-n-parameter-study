@@ -139,9 +139,9 @@ If you use this research, please cite:
 ```bibtex
 @article{llm-n-parameter-2024,
   title={Statistical Equivalence of the n Parameter in LLM APIs: An Empirical Study},
-  author={Your Name},
+  author={Max Ghenis},
   year={2024},
-  url={https://github.com/yourusername/llm-n-parameter-study}
+  url={https://github.com/maxghenis/llm-n-parameter-study}
 }
 ```
 
